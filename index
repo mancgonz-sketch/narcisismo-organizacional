@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expediente · Personalidad, Poder y Patología Organizacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --shell: #191a16;
+    --shell-2: #14150f;
+    --paper: #ece5d3;
+    --paper-2: #e2d9c3;
+    --ink: #221f19;
+    --ink-soft: #4a4438;
+    --stamp: #7c2d24;
+    --stamp-soft: #a9463a;
+    --gold: #a9822f;
+    --gold-soft: #cdae66;
+    --line: rgba(34,31,25,0.16);
+    --shell-line: rgba(205,174,102,0.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--shell);
+    background-image:
+      radial-gradient(ellipse at 20% -10%, rgba(169,130,47,0.10), transparent 45%),
+      radial-gradient(ellipse at 90% 10%, rgba(124,45,36,0.10), transparent 40%);
+    color: var(--paper);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{ max-width: 980px; margin: 0 auto; padding: 56px 20px 120px; }
+
+  /* ---------- Header ---------- */
+  header.top{ margin-bottom: 48px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:""; width:22px; height:1px; background: var(--gold-soft); display:inline-block; }
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.08;
+    margin: 14px 0 10px;
+    color: #f4efe2;
+    max-width: 16ch;
+  }
+  h1 em{ font-style: italic; font-weight:500; color: var(--gold-soft); }
+  .lede{
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: #cfc9b8;
+    max-width: 62ch;
+    margin: 0 0 6px;
+  }
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap: 10px 22px;
+    margin-top: 22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: #8f8a78;
+    border-top: 1px solid var(--shell-line);
+    padding-top: 14px;
+  }
+  .meta-row b{ color:#d8c48a; font-weight:600; }
+
+  /* ---------- Progress ---------- */
+  .progress-block{
+    margin-top: 26px;
+    background: var(--shell-2);
+    border: 1px solid var(--shell-line);
+    border-radius: 3px;
+    padding: 16px 18px;
+  }
+  .progress-top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .progress-label{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#8f8a78;}
+  .progress-count{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:#e3d6a8;}
+  .bar-outer{ height:8px; background:#25261f; border-radius:2px; overflow:hidden; border:1px solid var(--shell-line);}
+  .bar-inner{ height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--stamp-soft)); width:0%; transition: width .4s ease;}
+
+  /* ---------- Nav pills ---------- */
+  nav.modnav{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin: 28px 0 8px;
+  }
+  nav.modnav a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color:#b7ae94;
+    text-decoration:none;
+    border:1px solid var(--shell-line);
+    padding:6px 10px;
+    border-radius: 2px;
+    letter-spacing:.03em;
+    white-space:nowrap;
+  }
+  nav.modnav a:hover{ color:#f4efe2; border-color:var(--gold-soft); }
+
+  /* ---------- Module (folder) ---------- */
+  .module{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    margin-top: 34px;
+    position: relative;
+    box-shadow: 0 18px 40px -18px rgba(0,0,0,0.55), 0 2px 0 rgba(0,0,0,0.2);
+  }
+  .tab{
+    position:absolute;
+    top:-16px; left:28px;
+    background: var(--ink);
+    color: var(--gold-soft);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    padding:5px 12px 6px;
+    border-radius: 2px 2px 0 0;
+  }
+  .module-inner{ padding: 40px 34px 30px; }
+  .module-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:18px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    flex-wrap:wrap;
+  }
+  .module-number{
+    font-family:'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 42px;
+    color: var(--stamp);
+    line-height:1;
+    min-width: 56px;
+  }
+  .module-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size: 23px;
+    margin: 0 0 6px;
+  }
+  .module-sub{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height:1.5;
+    max-width: 58ch;
+  }
+  .module-progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--stamp);
+    border: 1px solid var(--stamp);
+    padding: 4px 9px;
+    border-radius: 20px;
+    white-space:nowrap;
+    align-self:flex-start;
+  }
+
+  /* ---------- Reading items ---------- */
+  .item{
+    display:flex; gap:14px;
+    padding: 15px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .item:last-child{ border-bottom:none; }
+  .check{
+    flex-shrink:0; margin-top: 3px;
+    width:19px; height:19px;
+    border:1.5px solid var(--ink-soft);
+    border-radius:3px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(255,255,255,0.25);
+  }
+  .check.done{ background: var(--stamp); border-color: var(--stamp); }
+  .check svg{ width:12px; height:12px; opacity:0; }
+  .check.done svg{ opacity:1; }
+  .item-body{ flex:1; }
+  .item-top{ display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 10px; }
+  .item-author{ font-weight:600; font-size:14.5px; }
+  .item-work{ font-style:italic; font-size:14px; color: var(--ink-soft); }
+  .item-year{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color: var(--ink-soft); }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding: 3px 0;
+    width: 62px;
+    text-align: center;
+    border-radius: 20px;
+    border:1px solid currentColor;
+    display:inline-block;
+  }
+  .tag.lang-es, .tag.lang-en{ width: 32px; }
+  .tag.open{ color:#3f6b3f; }
+  .tag.paywall{ color:#8a5a1e; }
+  .tag.book{ color:#3f4f6b; }
+  .tag.lang-es{ color:#2f6b52; background:rgba(63,107,82,0.12); border-color:#2f6b52; }
+  .tag.lang-en{ color:#6b4a2f; background:rgba(107,74,47,0.10); border-color:#6b4a2f; }
+  .filter-bar{
+    display:flex; align-items:center; gap:10px;
+    margin: 18px 0 0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color:#b7ae94;
+  }
+  .filter-bar label{ display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .filter-bar input{ accent-color: var(--gold-soft); }
+  .item.hidden-by-filter{ display:none; }
+  .resumen-box{
+    margin-top: 10px;
+    background: rgba(63,107,82,0.07);
+    border-left: 3px solid #3f6b52;
+    padding: 11px 14px;
+    border-radius: 0 3px 3px 0;
+  }
+  .resumen-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #2f6b52;
+    display:block;
+    margin-bottom: 5px;
+  }
+  .resumen-text{ font-size: 13.5px; line-height: 1.6; color: var(--ink); }
+  .item.done .item-author, .item.done .item-work{ opacity:.5; text-decoration: line-through; }
+  .item-note{ font-size:13px; color: var(--ink-soft); margin-top:4px; line-height:1.5; max-width:70ch;}
+  .item-link{
+    display:inline-flex; align-items:center; gap:5px;
+    margin-top:7px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color: var(--stamp);
+    text-decoration:none;
+    border-bottom: 1px solid transparent;
+  }
+  .item-link:hover{ border-bottom-color: var(--stamp); }
+  .item-link.disabled{ color:#948d78; pointer-events:none; }
+  .note-toggle{
+    display:inline-flex; align-items:center; gap:5px;
+    margin-top:7px; margin-left:14px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color: var(--ink-soft);
+    background:none; border:none; cursor:pointer;
+    text-decoration: underline dotted;
+    padding:0;
+  }
+  .note-toggle:hover{ color: var(--ink); }
+  .note-box{ display:none; margin-top:10px; }
+  .note-box.open{ display:block; }
+  .note-box textarea{
+    width:100%;
+    min-height: 74px;
+    resize: vertical;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 9px 11px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .note-box textarea:focus{ outline: 1px solid var(--stamp); }
+  .note-saved{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #6b8f5f;
+    opacity: 0;
+    transition: opacity .3s ease;
+    margin-top: 4px;
+    display:block;
+  }
+  .note-saved.show{ opacity: 1; }
+
+  /* ---------- Footer note ---------- */
+  .footnote{
+    margin-top: 46px;
+    padding: 20px 22px;
+    border: 1px dashed var(--shell-line);
+    border-radius: 3px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #b7ae94;
+  }
+  .footnote b{ color:#e3d6a8; }
+
+  @media (max-width: 640px){
+    .module-inner{ padding: 34px 20px 24px; }
+    .module-head{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">Expediente personal de estudio</div>
+    <h1>Personalidad, poder<br>y <em>patología organizacional</em></h1>
+    <p class="lede">Dossier de lecturas para un programa de especialización propio: de los estilos de liderazgo clásicos al narcisismo organizacional y la psicopatía corporativa, con foco en diagnóstico, dinámica sistémica y soluciones. Marcá cada lectura a medida que la completes — el progreso se guarda automáticamente.</p>
+    <div class="meta-row">
+      <span><b>8</b> módulos</span>
+      <span><b id="total-count">0</b> lecturas relevadas</span>
+      <span>Orden sugerido: secuencial (0 → 7)</span>
+      <span>Última actualización: julio 2026</span>
+    </div>
+
+    <div class="progress-block">
+      <div class="progress-top">
+        <span class="progress-label">Avance del expediente</span>
+        <span class="progress-count" id="progress-count">0 / 0 leídas</span>
+      </div>
+      <div class="bar-outer"><div class="bar-inner" id="bar-inner"></div></div>
+    </div>
+
+    <nav class="modnav" id="modnav"></nav>
+    <div class="filter-bar">
+      <label><input type="checkbox" id="filter-es"> Mostrar solo lecturas en español (<span id="es-count">0</span> de <span id="total-count-2">0</span>)</label>
+    </div>
+  </header>
+
+  <main id="modules"></main>
+
+  <div class="footnote">
+    <b>Cómo usar este expediente:</b> cada módulo tiene un orden de lectura pensado — dentro de un módulo, arriba lo más fundacional, abajo lo más aplicado. Las etiquetas de acceso indican: <span style="color:#3f6b3f">ABIERTO</span> (PDF/artículo de acceso libre), <span style="color:#8a5a1e">PAYWALL</span> (revista académica con acceso institucional o de pago), y <span style="color:#3f4f6b">LIBRO</span> (edición comercial). Las etiquetas <b>ES</b> / <b>EN</b> indican el idioma del texto original. <b>Todas las lecturas en inglés ahora tienen un resumen sustancial en español (recuadro verde) con los hallazgos y conceptos clave</b> — no hace falta abrir el original salvo que quieras profundizar o citarlo textualmente. Cuando un link de PDF esté caído, buscá el título exacto entre comillas + el apellido del autor: casi siempre aparece una copia en ResearchGate, SciELO o Redalyc.
+  </div>
+
+</div>
+
+<script>
+const MODULES = [
+  {
+    id:"m0", num:"0", title:"Fundamentos: Personalidad y Liderazgo",
+    sub:"La base científica antes de la patología: cómo se mide la personalidad y cómo se relaciona con el liderazgo transformacional/transaccional.",
+    items:[
+      {a:"Hoyos Vallejo, C.A.", w:"Personalidad y Liderazgo", y:"s/f", tag:"open", lang:"es", url:"", note:"Ya lo tenés en tus archivos — es el punto de partida perfecto, resume 30 años de investigación y nombra a casi todos los autores de este módulo."},
+      {a:"Judge, T.A. & Bono, J.E.", w:"Five-Factor Model of Personality and Transformational Leadership", y:"2000", tag:"open", lang:"en", url:"https://www.timothy-judge.com/files/judge%20-%20bono%20jap%202000.pdf", note:"Meta-análisis fundacional sobre los Cinco Grandes y el liderazgo transformacional.", resumen:"Judge y Bono analizaron 14 muestras de líderes en más de 200 organizaciones para ver qué rasgos de personalidad predicen el liderazgo transformacional (carisma, inspiración, estimulación intelectual, consideración individual). Resultado: la extroversión y la agradabilidad predicen ese estilo de liderazgo; la apertura a la experiencia se correlaciona pero pierde fuerza al controlar los otros rasgos; y el neuroticismo y la conciencia (meticulosidad) no muestran relación significativa. Conclusión práctica: para seleccionar líderes con perfil transformacional, los rasgos que más pesan son sociabilidad/energía (extroversión) y calidez/confiabilidad interpersonal (agradabilidad), no la disciplina ni la estabilidad emocional como se podría suponer."},
+      {a:"Judge, T.A., Bono, J.E., Ilies, R. & Gerhardt, M.W.", w:"Personality and Leadership: A Qualitative and Quantitative Review", y:"2002", tag:"paywall", lang:"en", url:"https://psycnet.apa.org/record/2002-06316-014", note:"Introduce la distinción clave entre liderazgo emergente y liderazgo efectivo.", resumen:"Este es el paper que separa dos preguntas que se confundían: ¿quién es percibido como líder? (liderazgo emergente) vs. ¿quién realmente logra buenos resultados con su equipo? (liderazgo efectivo). Al cruzar los Cinco Grandes con ambos criterios, encuentran que la extroversión es, con diferencia, el rasgo más consistente para las dos cosas — la gente sociable y dominante tiene más chances de ser vista como líder y de lograr resultados. La conciencia predice más el surgimiento como líder que la efectividad real. La apertura a la experiencia es el rasgo más controvertido: predice liderazgo pero no está claro si por creatividad, por toma de riesgos o por pensamiento visionario. La agradabilidad es, sorprendentemente, el rasgo más débil: la gente 'buena onda' tiende a ser más pasiva y sumisa, por lo que emerge menos como líder. Este hallazgo es clave para tu tema: explica por qué perfiles narcisistas o psicopáticos —altos en extroversión y bajos en agradabilidad— *emergen* como líderes con facilidad, aunque después no sean efectivos."},
+      {a:"Bono, J.E. & Judge, T.A.", w:"Personality and Transformational and Transactional Leadership: A Meta-Analysis", y:"2004", tag:"paywall", lang:"en", url:"https://doi.org/10.1037/0021-9010.89.5.901", note:"Cruza los Cinco Grandes con las 8 dimensiones específicas de Bass.", resumen:"Este estudio va más al detalle: en vez de mirar 'liderazgo transformacional' como un bloque, lo separa en carisma, estimulación intelectual y consideración individual (transformacional) y recompensa contingente, gestión por excepción activa y liderazgo pasivo (transaccional). Hallazgo central: la extroversión y el neuroticismo son los rasgos más ligados al carisma — y acá aparece algo importante para tu tema: el neuroticismo se relaciona tanto con el carisma como con el liderazgo pasivo, dependiendo de cómo se module. La agradabilidad es el predictor más fuerte de la 'recompensa contingente' (el intercambio limpio de recursos por desempeño), aunque con bastante variabilidad entre estudios. Conclusión de los autores: el liderazgo transaccional se puede enseñar en la currícula de las escuelas de negocios; el transformacional depende más de rasgos de personalidad y experiencias de vida tempranas, por lo que es más difícil de entrenar desde cero."},
+      {a:"D'Alessio, F.", w:"The Influence of Personality Domains and Working Experience in Peruvian Managers' Leadership Styles", y:"2008", tag:"open", lang:"en", url:"https://journals.pucp.edu.pe/index.php/centrum/article/view/", note:"Aplicación regional (gerentes peruanos).", resumen:"Estudio con gerentes peruanos que reduce el modelo a tres estilos de liderazgo: transformacional, transaccional y evitación pasiva. Encuentra diferencias interesantes por edad y experiencia: los gerentes de 41 a 58 años muestran más comportamientos transformacionales que los de 23 a 40, pero también más evitación pasiva (paradoja: con la experiencia se gana visión pero a veces también cansancio o resignación frente a ciertos conflictos). La conciencia (meticulosidad) resultó el rasgo más asociado al liderazgo transaccional, seguida de la extroversión; para el transformacional, otra vez la extroversión aparece como el segundo factor más fuerte después de la conciencia. Es un buen modelo de investigación aplicada regional si más adelante querés replicar algo similar en ACA con tus gerentes de estación."}
+    ]
+  },
+  {
+    id:"m1", num:"1", title:"Liderazgo Trascendente (el contrapunto positivo)",
+    sub:"El otro extremo del espectro motivacional — el que ya empezaste a estudiar con Pérez López. Sirve de eje de comparación frente al narcisismo.",
+    items:[
+      {a:"Pérez López, J.A.", w:"Fundamentos de la Dirección de Empresas", y:"1993/2013", tag:"book", lang:"es", url:"", note:"El libro base de la motivación trascendente (IESE), escrito originalmente en español. Releelo ahora con la lupa de 'tipos de organización': mecanicista, orgánica, humana."},
+      {a:"Cardona, P. & Rey, C.", w:"Dirección por Misión: Cómo Introducir la Misión en la Gestión", y:"2005", tag:"book", lang:"es", url:"", note:"Desarrollo del liderazgo trascendente aplicado a competencias directivas concretas, también en español originalmente."}
+    ]
+  },
+  {
+    id:"m2", num:"2", title:"El marco de las personalidades oscuras",
+    sub:"El paraguas conceptual antes de separar narcisismo y psicopatía como fenómenos distintos: Dark Triad y Dark Tetrad.",
+    items:[
+      {a:"Paulhus, D.L. & Williams, K.M.", w:"The Dark Triad of Personality: Narcissism, Machiavellianism, and Psychopathy", y:"2002", tag:"open", lang:"en", url:"https://www2.psych.ubc.ca/~dpaulhus/research/SELF-ENHANCEMENT/downloads/ARTICLES/JRP.02.pdf", note:"El paper fundacional del Dark Triad, corto y denso.", resumen:"Paulhus y Williams comprueban con datos que narcisismo, maquiavelismo y psicopatía subclínica (versiones 'leves', de población normal, no criminal) comparten un núcleo común: todos entran en el cuadrante de 'agencia sin control' — gente sociable, extrovertida y abierta a la experiencia, pero con baja agradabilidad, es decir, poco interés genuino por el bienestar ajeno. Encuentran que narcisismo y maquiavelismo se solapan con psicopatía, pero no son lo mismo: el narcisista sobreestima su propia inteligencia y capacidad (autoengaño), mientras que el maquiavélico no muestra ese sesgo de autoengaño — es frío y calculador incluso sobre sí mismo. La psicopatía muestra un nivel intermedio de autoengaño. Este paper es la base de todo lo que viene: te da el 'mapa' para diferenciar los tres rasgos oscuros antes de estudiarlos por separado."},
+      {a:"Furnham, A., Richards, S.C. & Paulhus, D.L.", w:"The Dark Triad of Personality: A 10 Year Review", y:"2013", tag:"paywall", lang:"en", url:"https://www.researchgate.net/publication/235914370_The_Dark_Triad_of_Personality_A_10Year_Review", note:"Balance de una década de investigación sobre el Dark Triad.", resumen:"Diez años después del paper original, este balance confirma que el Dark Triad se sostuvo como marco útil (más de 350 citas para entonces) y repasa los instrumentos de medición que se desarrollaron: cuestionarios cortos, combinados, y su ubicación dentro de modelos más amplios de personalidad como el circumplejo interpersonal y el modelo de Cinco/Seis Factores. Es más una revisión metodológica que un hallazgo nuevo — útil si en algún momento vas a diseñar vos mismo un instrumento de evaluación para ACA."},
+      {a:"Jonason, P.K. & Webster, G.D.", w:"The Dirty Dozen: A Concise Measure of the Dark Triad", y:"2010", tag:"paywall", lang:"en", url:"https://psycnet.apa.org/record/2009-25511-001", note:"El instrumento breve de 12 ítems para medir el Dark Triad.", resumen:"Los autores crean un cuestionario de solo 12 preguntas (4 por cada rasgo: narcisismo, maquiavelismo, psicopatía) que mide el Dark Triad de forma rápida y confiable, sin necesitar los cuestionarios largos originales de 40+ ítems. Pensado para investigación aplicada donde no hay tiempo para tests extensos — es, en la práctica, el instrumento que más se usa hoy en estudios organizacionales rápidos. Si alguna vez querés armar una encuesta propia de clima o selección, este es el punto de partida técnico más citado."},
+      {a:"Buckels, E.E., Jones, D.N. & Paulhus, D.L.", w:"Behavioral Confirmation of Everyday Sadism", y:"2013", tag:"paywall", lang:"en", url:"https://journals.sagepub.com/doi/10.1177/0956797613490749", note:"Introduce el sadismo como cuarto vértice (Dark Tetrad).", resumen:"Este estudio propone sumar un cuarto rasgo al Dark Triad: el sadismo cotidiano (el placer, no instrumental, de causar daño o presenciarlo). A diferencia del psicópata que daña para conseguir algo, el sádico disfruta el daño en sí mismo. Los autores comprobaron experimentalmente que personas con alto sadismo elegían tareas que implicaban lastimar a otros (matar insectos en una tarea de laboratorio) incluso cuando había opciones sin daño disponibles, y sin ganancia adicional. Es la pieza más reciente y menos consensuada del módulo — opcional para una primera pasada, pero interesante si te cruzás con comportamientos de liderazgo que parecen dañar 'porque sí', más allá de cualquier cálculo racional."}
+    ]
+  },
+  {
+    id:"m3", num:"3", title:"Narcisismo: de la clínica a la organización",
+    sub:"De Freud a Kernberg, y de ahí al management: cómo el narcisismo individual se traduce en cultura organizacional.",
+    items:[
+      {a:"Freud, S.", w:"Introducción al Narcisismo", y:"1914", tag:"open", lang:"es", url:"https://www.bibliopsi.org/docs/freud/14%20-%20Tomo%20XIV.pdf", note:"El texto originario, en español (traducción Amorrortu). Corto, denso, hay que leerlo aunque sea una vez."},
+      {a:"Kernberg, O.", w:"Trastorno de Personalidad Narcisista", y:"2010", tag:"open", lang:"es", url:"https://aperturas.org/articulo.php?articulo=0000758", note:"Escrito directamente en español (revista Aperturas Psicoanalíticas) — marco clínico central del módulo."},
+      {a:"Kets de Vries, M. & Miller, D.", w:"The Neurotic Organization", y:"1984", tag:"book", lang:"en", url:"", note:"El libro central del módulo sobre patrones organizacionales neuróticos.", resumen:"Kets de Vries y Miller proponen que el estilo psicológico de la cúpula directiva termina moldeando toda la cultura de la empresa, especialmente en organizaciones centralizadas. Identifican 5 patrones organizacionales que calcan estilos neuróticos individuales: (1) la organización PARANOIDE — desconfiada, hipervigilante, con líderes que acumulan poder y no delegan por miedo a ser traicionados; (2) la COMPULSIVA — obsesionada con el control y el detalle, pierde de vista el panorama general, rígida en procedimientos; (3) la DRAMÁTICA/histriónica — centrada en el protagonismo del líder, decisiones impulsivas para llamar la atención, cultura de exhibicionismo; (4) la DEPRESIVA — pasiva, sin rumbo, esperando que las cosas 'simplemente pasen', baja iniciativa generalizada; y (5) la ESQUIZOIDE — líder distante y desconectado emocionalmente, la organización queda huérfana de dirección real aunque funcione en el papel. La idea central: no hay que diagnosticar solo al individuo, sino reconocer estos patrones en la cultura completa — reuniones, políticas, ritmo de decisiones — porque ahí es donde el patrón se vuelve sistémico y deja de depender de una sola persona."},
+      {a:"Kets de Vries, M. & Miller, D.", w:"Narcissism and Leadership: An Object Relations Perspective", y:"1985", tag:"paywall", lang:"en", url:"https://www.researchgate.net/publication/285075329_Narcissism_and_leadership_An_object_relations_perspective", note:"Las tres configuraciones narcisistas de líder.", resumen:"Este paper distingue tres configuraciones narcisistas en líderes, usando teoría psicoanalítica de relaciones objetales: (1) REACTIVA — el líder está permanentemente a la defensiva, hipersensible a la crítica, ve enemigos en todas partes, su energía se va en protegerse en vez de construir; (2) AUTOENGAÑO (self-deceptive) — el líder cree genuinamente en su propia grandiosidad, no distingue entre su deseo y la realidad, rodeado de gente que le confirma la fantasía (síes) en vez de desafiarlo; y (3) CONSTRUCTIVA — el narcisismo está 'domesticado': el líder tiene autoconfianza alta pero también capacidad real de autocrítica, consulta a su equipo antes de decisiones importantes, y canaliza su necesidad de reconocimiento hacia logros verificables, no solo hacia la apariencia de logro. La configuración constructiva es la única de las tres que se sostiene en el tiempo sin daño organizacional — las otras dos tienden a colapsar cuando la realidad choca con la fantasía del líder."},
+      {a:"Goleman, D.", w:"El narcisismo organizacional (nota de blog/prensa)", y:"2011", tag:"open", lang:"es", url:"https://fuguetcomunicacionycambio.com/2011/05/21/el-narcisismo-organizacional/", note:"En español, divulgativo — buen punto de entrada liviano."},
+      {a:"Braun, S.", w:"Leader Narcissism and Outcomes in Organizations: A Review at Multiple Levels of Analysis", y:"2017", tag:"open", lang:"en", url:"https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00773/full", note:"Revisión abierta y actual del estado del arte empírico.", resumen:"Esta revisión (accesible gratis en Frontiers) organiza toda la evidencia empírica reciente sobre narcisismo y liderazgo en distintos niveles: individual, diádico (líder-seguidor) y organizacional. Su aporte central es nombrar la 'paradoja del narcisista': necesita desesperadamente la validación de otros para sostener su autoestima, pero al mismo tiempo no le importa genuinamente el bienestar de esos otros — necesita el vínculo pero no puede sostenerlo sanamente en el tiempo. La revisión muestra que los resultados empíricos sobre si el narcisismo 'ayuda o perjudica' al liderazgo son mixtos —a veces positivo a corto plazo (primera impresión, carisma inicial), casi siempre negativo a largo plazo (rotación de talento, mal clima, decisiones de riesgo mal evaluadas). Es la lectura más 'actual' del módulo, buena para cerrar el tema con el estado del arte de 2017."},
+      {a:"Maccoby, M.", w:"The Productive Narcissist: The Promise and Peril of Visionary Leadership", y:"2003", tag:"book", lang:"en", url:"", note:"El contrapeso funcional: narcisismo productivo vs. improductivo.", resumen:"Maccoby argumenta que muchos de los líderes más innovadores de la historia (cita a Steve Jobs, Jack Welch, Oprah Winfrey) son narcisistas, y que eso no es necesariamente malo. Distingue al 'narcisista productivo', que canaliza su necesidad de reconocimiento hacia visión estratégica real, de el 'narcisista improductivo', que se pierde en la fantasía y el ataque a supuestos enemigos. Define 5 competencias que llama 'inteligencia estratégica': (1) foresight — capacidad de intuir hacia dónde va el mercado o el mundo antes que otros; (2) pensamiento sistémico — ver el todo, no partes sueltas; (3) visioning — poder plasmar esa visión en una estrategia concreta; (4) motivar — lograr que otros se sumen a esa visión; y (5) partnering — saber rodearse de socios que compensen las propias debilidades (Jobs fracasó solo, tuvo éxito cuando sumó a Tim Cook y Jony Ive). El narcisista colapsa cuando pierde el contacto con la realidad, se vuelve grandioso o paranoico y deja de escuchar — el ejemplo que da es Napoleón, exitoso mientras escuchó a su ministro Talleyrand, perdido cuando dejó de hacerlo."}
+    ]
+  },
+  {
+    id:"m4", num:"4", title:"Psicopatía corporativa: diagnóstico y medición",
+    sub:"De la cárcel a la sala de directorio: instrumentos clínicos aplicados al mundo laboral.",
+    items:[
+      {a:"Hare, R.D.", w:"Sin Conciencia: El Inquietante Mundo de los Psicópatas que nos Rodean", y:"1993", tag:"book", lang:"es", url:"https://www.casadellibro.com/libro-sin-conciencia-el-inquietante-mundo-de-los-psicopatas-que-nos-ro-dean/9788449313615/904759", note:"Traducción oficial al español (Paidós) del libro clínico de Hare — leelo primero en esta versión, es la base del PCL-R antes de ver la aplicación corporativa."},
+      {a:"Babiak, P. & Hare, R.D.", w:"Snakes in Suits: When Psychopaths Go to Work", y:"2006", tag:"book", lang:"en", url:"", note:"El libro central del módulo, sin traducción oficial.", resumen:"El libro sigue el caso ficticio (pero basado en patrones reales) de 'Frank y Dave' para ilustrar cómo un psicópata corporativo asciende en una empresa. Estructura: primero muestra que los psicópatas SÍ están presentes en las organizaciones (y en proporción 4 veces mayor que en la población general); después explica por qué son difíciles de detectar — son extremadamente hábiles leyendo a la gente e identificando a quién manipular y cómo, mientras el resto de nosotros tarda en darse cuenta de que estamos siendo usados. Describe el proceso en tres etapas: EVALUACIÓN (identifican quién tiene poder/recursos útiles), MANIPULACIÓN (construyen una relación de confianza falsa, usando encanto y mentiras calculadas) y ABANDONO (cuando la persona ya no les sirve, la descartan sin culpa ni remordimiento). Un dato clave del libro: contra lo que muchos 'expertos' asumían, el maltrato psicopático NO se hace evidente con el tiempo ante los empleadores — al contrario, muchos psicópatas ascienden y son promovidos, porque confunden su narcisismo extremo con 'rasgo de liderazgo positivo'. Los autores desarrollaron a partir de este trabajo el instrumento B-Scan 360 para evaluación laboral."},
+      {a:"Boddy, C.R.", w:"Corporate Psychopaths: Organisational Destroyers", y:"2011", tag:"book", lang:"en", url:"", note:"El autor más prolífico del nicho — priorizá el resumen de Terán-Bustamante (abajo) antes que el original.", resumen:"Boddy sostiene que la psicopatía corporativa se volvió más común porque las organizaciones modernas —fusiones frecuentes, reestructuraciones constantes, crecimiento acelerado— generan justo el tipo de caos y estímulo constante que atrae a personalidades psicopáticas (buscadoras de emociones fuertes). A diferencia del psicópata criminal, el corporativo no roba ni mata: usa su cargo para 'maltratar' de formas legales — bullying laboral, apropiación de créditos ajenos, despidos impulsivos. Boddy insiste en que, contrario al mito del 'psicópata eficiente', en realidad son un parásito organizacional: no aportan valor real, solo lo simulan bien. Suelen ocupar posiciones altas en organizaciones financieras grandes por las recompensas potenciales que ofrecen esos ambientes."},
+      {a:"Boddy, C.R.", w:"The Corporate Psychopaths Theory of the Global Financial Crisis", y:"2011", tag:"paywall", lang:"en", url:"https://link.springer.com/article/10.1007/s10551-011-0810-4", note:"Paper corto que vincula psicópatas corporativos con la crisis 2007-2008.", resumen:"Es un paper teórico breve (5 páginas) donde Boddy argumenta que directores financieros con rasgos psicopáticos tuvieron un rol central en causar la crisis financiera global. Su hipótesis: la globalización y la alta rotación laboral (la gente cambia de trabajo cada 2-3 años en vez de construir una carrera de 20-30 años en la misma empresa) hicieron más difícil detectar psicópatas, porque ya no hay historial largo de comportamiento que los delate — llegan, causan daño y se van antes de que se note el patrón. El paper es más una teoría plausible que una prueba definitiva, y el propio Boddy llama a más investigación empírica sobre el tema."},
+      {a:"Terán-Bustamante, A. et al.", w:"Confiabilidad y Validez de un Instrumento de Selección de Capital Humano (revisión del corpus Boddy/Hare/Babiak en español)", y:"2020", tag:"open", lang:"es", url:"https://www.scielo.org.mx/pdf/rmef/v15n3/2448-6795-rmef-15-03-435.pdf", note:"Excelente resumen en español de todo el marco B-Scan 360 y el corpus de Boddy — arrancá el módulo por acá."},
+      {a:"Mathieu, C., Neumann, C.S., Hare, R.D. & Babiak, P.", w:"A Dark Side of Leadership: Corporate Psychopathy and its Influence on Employee Well-Being and Job Satisfaction", y:"2014", tag:"paywall", lang:"en", url:"https://doi.org/10.1016/j.paid.2013.11.010", note:"Desarrollo del instrumento B-Scan 360 aplicado.", resumen:"Este estudio aplica el B-Scan 360 (evaluación de 4 factores: manipulador/antiético, insensible/despiadado, no confiable/desenfocado, intimidante/agresivo) a empleados reales, midiendo directamente el impacto de tener un jefe con rasgos psicopáticos sobre el bienestar y la satisfacción laboral del equipo. El hallazgo central, sin sorpresas pero con datos duros: a mayor puntaje psicopático del supervisor, menor satisfacción laboral y menor bienestar general de sus subordinados, de forma estadísticamente significativa. Es la prueba empírica del daño concreto, no solo la descripción cualitativa que dan Babiak y Hare en su libro."}
+    ]
+  },
+  {
+    id:"m5", num:"5", title:"Del individuo al sistema: cuando la organización misma se vuelve psicopática",
+    sub:"El eslabón que conecta el rasgo individual con la dinámica organizacional completa.",
+    items:[
+      {a:"Padilla, A., Hogan, R. & Kaiser, R.B.", w:"The Toxic Triangle: Destructive Leaders, Susceptible Followers, and Conducive Environments", y:"2007", tag:"open", lang:"en", url:"https://www.researchgate.net/profile/Robert-Kaiser/publication/222521379_The_toxic_triangle_Destructive_leaders_susceptible_followers_and_conducive_environments/links/59f1d3c6458515bfd081bff5/The-toxic-triangle-Destructive-leaders-susceptible-followers-and-conducive-environments.pdf", note:"EL paper bisagra de todo el programa.", resumen:"Padilla, Hogan y Kaiser argumentan que el liderazgo destructivo NUNCA depende solo del líder — es la confluencia de tres elementos, como los tres lados de un triángulo: (1) LÍDERES DESTRUCTIVOS, caracterizados por carisma, necesidad personalizada de poder, narcisismo, una historia de vida con eventos negativos no resueltos, e ideología extrema; (2) SEGUIDORES SUSCEPTIBLES, que se dividen en dos tipos — los 'conformistas', que obedecen por necesidades psicológicas no satisfechas (baja autoestima, inmadurez) y los 'colaboradores', que activamente comparten la visión del líder y buscan poder o estatus propio a través de él; y (3) ENTORNOS PROPICIOS, con cuatro rasgos: inestabilidad (el líder promete restaurar el orden), amenaza percibida (el líder canaliza el miedo colectivo), ciertos valores culturales (colectivismo alto, alta distancia de poder, evitación de la incertidumbre facilitan la obediencia ciega) y, el más importante para la prevención según los autores, la AUSENCIA DE CONTRAPESOS Y CONTROLES institucionales (falta de un directorio con supervisión real, ausencia de jerarquía y rendición de cuentas claras). Usan el ejemplo de Fidel Castro para ilustrar la dinámica completa. La conclusión aplicada más importante: no alcanza con 'sacar al líder tóxico' si el entorno sigue siendo propicio y los seguidores siguen siendo susceptibles — el sistema completo tiene que cambiar."},
+      {a:"Padilla, A., Hogan, R. & Kaiser, R.B.", w:"The Toxic Triangle (versión alternativa de acceso abierto)", y:"2007", tag:"open", lang:"en", url:"https://www.academia.edu/76474215/The_toxic_triangle_Destructive_leaders_susceptible_followers_and_conducive_environments", note:"Espejo del mismo paper en inglés, por si el link de ResearchGate no carga (mismo resumen que el ítem anterior)."},
+      {a:"Bakan, J.", w:"La Corporación: La Búsqueda Patológica de Lucro y Poder", y:"2004", tag:"book", lang:"es", url:"https://latam.casadellibro.com/libros-ebooks/joel-bakan/112561", note:"Sí tiene traducción oficial al español (Editorial Volter) — leelo en esta versión, no hace falta el inglés acá."},
+      {a:"Bakan, J. (entrevista)", w:"The Modern Corporation: A Charming Psychopath", y:"2020", tag:"open", lang:"en", url:"https://roarmag.org/essays/tni-state-of-power-joel-bakan-interview/", note:"Bakan actualiza su tesis 15 años después.", resumen:"En esta entrevista Bakan revisita su tesis original —que la corporación, como institución legal, reúne rasgos psicopáticos por su propio diseño: mandato de maximizar ganancias sin límite moral, indiferencia legal hacia el daño a terceros— y agrega una vuelta de tuerca preocupante: en los últimos años muchas corporaciones adoptaron el lenguaje de la sostenibilidad y la responsabilidad social, lo cual, según Bakan, las hace potencialmente MÁS peligrosas, no menos, porque ahora usan ese discurso para desregular aún más sin perder legitimidad pública. Mantiene su propuesta original de que el cambio real solo puede venir de regulación legal externa y control democrático, no de la buena voluntad interna de las empresas."},
+      {a:"Mullen, W.", w:"The Toxic Triangle: Understanding How Systems Enable Abuse", y:"2025", tag:"open", lang:"en", url:"https://wademullen.substack.com/p/the-toxic-triangle", note:"Aplicación del marco de Padilla a sistemas institucionales abusivos.", resumen:"Mullen toma el marco de Padilla-Hogan-Kaiser y lo aplica a instituciones reales que encubrieron abusos (usa ejemplos de iglesias y organizaciones grandes). Su aporte central: las instituciones muchas veces responden a una crisis de liderazgo tóxico simplemente creando NUEVAS políticas o declaraciones públicas de integridad — pero eso no cambia nada si el sistema de fondo (falta de controles reales, cultura de silencio) sigue intacto. Su frase-concepto: 'la presencia de una política no equivale a la presencia de seguridad real' — los sistemas pueden adoptar el lenguaje de la protección mientras siguen funcionando de manera dañina por debajo. Buena lectura corta para cerrar el módulo con una advertencia práctica sobre reformas cosméticas."}
+    ]
+  },
+  {
+    id:"m6", num:"6", title:"Casos reales (el banco de casos vivo)",
+    sub:"El marco cobra vida acá. Este módulo va corriendo en paralelo a todos los demás — sumale casos a medida que los encuentres.",
+    items:[
+      {a:"McLean, B. & Elkind, P.", w:"Enron: Los Tipos que Estafaron a América (título en español varía según edición)", y:"2003", tag:"book", lang:"es", url:"", note:"El caso fundacional del campo. Buscá la edición en español — circuló como 'Enron: los tipos que estafaron a América' o similar según el país."},
+      {a:"Carreyrou, J.", w:"Mala Sangre: Secretos y Mentiras de una Startup en Silicon Valley", y:"2018", tag:"book", lang:"es", url:"", note:"'Bad Blood' tiene traducción oficial al español. El caso Theranos/Elizabeth Holmes, manual de narcisismo + psicopatía funcional."},
+      {a:"Boddy, C.R.", w:"Psychopathic Leadership: A Case Study of a Corporate Psychopath CEO", y:"2017", tag:"paywall", lang:"en", url:"https://link.springer.com/article/10.1007/s10551-015-2908-6", note:"Estudio de caso académico único de un CEO diagnosticado retrospectivamente.", resumen:"Boddy reconstruye, a partir de entrevistas con empleados y documentación pública, el caso de un CEO real (anonimizado por razones legales) al que se le atribuyen rasgos psicopáticos altos según el marco B-Scan. El valor del paper es metodológico: muestra cómo aplicar el instrumento de diagnóstico a un caso concreto paso a paso, algo poco común en la literatura (la mayoría son estudios estadísticos con muchos casos, no el análisis detallado de uno solo). Opcional si ya tenés claro el marco B-Scan por el módulo anterior."},
+      {a:"[Banco propio]", w:"Casos argentinos/latinoamericanos por investigar", y:"—", tag:"open", lang:"es", url:"", note:"Espacio para sumar casos regionales en español — buscá coberturas de fraudes corporativos en medios especializados (Ámbito, Cronista, Infobae)."}
+    ]
+  },
+  {
+    id:"m7", num:"7", title:"Intervención y mejora organizacional (las soluciones)",
+    sub:"Cierra el programa con lo aplicado: cómo contener, regular y en algunos casos capitalizar estos rasgos.",
+    items:[
+      {a:"Kramer, R.M.", w:"The Harder They Fall", y:"2003", tag:"paywall", lang:"en", url:"https://hbr.org/2003/10/the-harder-they-fall", note:"Recomendaciones dirigidas directamente al propio líder narcisista.", resumen:"A diferencia de casi toda la literatura del tema (que habla sobre cómo lidiar CON un narcisista), Kramer escribe directamente PARA el líder narcisista, con la lógica de que muchos altos ejecutivos exitosos tienen estos rasgos y conviene ayudarlos a autorregularse antes de que colapsen. Sus recomendaciones giran en torno a construir mecanismos deliberados de humildad: rodearse de al menos una persona que diga la verdad incómoda sin miedo a represalias, revisar activamente las propias decisiones buscando dónde el ego pudo haber nublado el juicio, y distinguir conscientemente entre la confianza que viene de logros reales y la que viene solo de la necesidad de sentirse superior."},
+      {a:"Kets de Vries, M.", w:"Coaching the Narcissistic Executive to Move Beyond Black or White", y:"2018", tag:"book", lang:"en", url:"", note:"Manual de coaching ejecutivo específico para narcisistas.", resumen:"Este capítulo de coaching describe una técnica específica para trabajar con ejecutivos narcisistas: ayudarlos a salir del pensamiento 'todo o nada' (blanco o negro) que caracteriza su forma de ver el mundo — o son geniales o son un fracaso total, no hay grises. El coach trabaja para que el ejecutivo tolere la ambigüedad ('hice esto bien, esto otro no tan bien') sin que eso amenace su sentido de valor personal completo. Es una técnica aplicable directo a programas de desarrollo directivo en RRHH: en vez de confrontar el narcisismo de frente (lo cual genera defensividad), se trabaja indirectamente ampliando su capacidad de autoevaluación matizada."},
+      {a:"Guillén, L.", w:"Poder, Orgullo y Peligro: La Gestión de los Narcisistas en el Entorno Laboral", y:"2025", tag:"open", lang:"es", url:"https://dobetter.esade.edu/es/narcisistas-trabajo", note:"En español directamente (ESADE) — arrancá el módulo por acá."},
+      {a:"Lamela, S.", w:"El Narcisismo y las Organizaciones", y:"2021", tag:"open", lang:"es", url:"https://www.sonialamela.com/2021/07/20/narcisismo-en-las-organizaciones/", note:"En español, con propuestas concretas de intervención en RRHH y cultura."}
+    ]
+  },
+  {
+    id:"m8", num:"8", title:"Qué se puede aprender de ellos (capitalizar el rasgo)",
+    sub:"El cierre del círculo: no eliminar el rasgo sino rodearlo de estructuras que lo regulen.",
+    items:[
+      {a:"Dutton, K.", w:"La Sabiduría de los Psicópatas", y:"2012", tag:"book", lang:"es", url:"", note:"Sí tiene traducción oficial al español — buscala con este título, no hace falta leerlo en inglés."},
+      {a:"Dutton, K. & McNab, A.", w:"The Good Psychopath's Guide to Success", y:"2014", tag:"book", lang:"en", url:"", note:"Versión más práctica de la misma tesis de 'La Sabiduría de los Psicópatas'.", resumen:"Dutton se asocia con Andy McNab (ex-soldado de las fuerzas especiales británicas) para convertir la teoría del libro anterior en ejercicios prácticos: cómo activar deliberadamente rasgos 'psicopáticos funcionales' —audacia, frialdad bajo presión, capacidad de decir que no sin culpa— en situaciones puntuales (una negociación difícil, una decisión bajo presión), y desactivarlos el resto del tiempo. La diferencia clave que remarcan entre el 'psicópata bueno' (funcional) y el psicópata clínico: el primero PUEDE elegir cuándo activar esos rasgos: el segundo no tiene ese control, los rasgos lo dominan todo el tiempo. Como ya tenés el libro anterior en español, este es opcional — mismo concepto con más ejercicios."},
+      {a:"Maccoby, M.", w:"Narcissistic Leaders: Who Succeeds and Who Fails", y:"2007", tag:"book", lang:"en", url:"", note:"Reedición de The Productive Narcissist con nueva introducción.", resumen:"Es la reedición en tapa blanda del libro que ya resumimos en el módulo 3 (con una nueva introducción), así que el contenido central es el mismo: narcisista productivo vs. improductivo, y las 5 competencias de inteligencia estratégica (foresight, pensamiento sistémico, visioning, motivar, partnering). El agregado de esta edición es una reflexión sobre 'qué hacer si trabajás para un narcisista': invertir tu autoestima en otro lado (un hobby, la familia, un proyecto propio) para no depender emocionalmente de la validación de ese jefe, entender que 'todo gira en torno a él/ella' y que solo te va a valorar mientras aportes algo que necesite."},
+      {a:"Hogan, R.", w:"Personality and the Fate of Organizations", y:"2006", tag:"book", lang:"en", url:"", note:"Desde la psicometría organizacional.", resumen:"Hogan argumenta, desde su experiencia diseñando evaluaciones de personalidad para selección ejecutiva (Hogan Assessments), que los rasgos 'oscuros' de personalidad —incluido el narcisismo— en dosis moderadas y con buena autoconciencia pueden funcionar como un activo: dan al líder la seguridad para tomar decisiones difíciles bajo presión sin paralizarse. El problema no es el rasgo en sí, sino la ausencia de mecanismos de feedback honesto alrededor del líder — sin nadie que le diga la verdad, el rasgo se descontrola. Su propuesta aplicada: los programas de desarrollo de liderazgo deberían incluir evaluación 360° obligatoria y recurrente, no como trámite burocrático sino como el mecanismo central que mantiene a raya el lado oscuro de cualquier líder con estos rasgos."}
+    ]
+  }
+];
+
+
+// ---------- Render ----------
+const modulesEl = document.getElementById('modules');
+const navEl = document.getElementById('modnav');
+let allItemIds = [];
+
+MODULES.forEach(mod=>{
+  const a = document.createElement('a');
+  a.href = '#'+mod.id;
+  a.textContent = mod.num+' · '+mod.title.split(':')[0];
+  navEl.appendChild(a);
+
+  const section = document.createElement('section');
+  section.className = 'module';
+  section.id = mod.id;
+
+  let itemsHtml = '';
+  mod.items.forEach((it, idx)=>{
+    const itemId = mod.id+'-'+idx;
+    allItemIds.push(itemId);
+    const tagLabel = it.tag === 'open' ? 'Abierto' : it.tag === 'paywall' ? 'Paywall' : 'Libro';
+    const langLabel = it.lang === 'es' ? 'ES' : 'EN';
+    const linkHtml = it.url
+      ? `<a class="item-link" href="${it.url}" target="_blank" rel="noopener">↗ Abrir fuente</a>`
+      : `<span class="item-link disabled">— sin link directo (edición comercial) —</span>`;
+    const resumenHtml = it.resumen
+      ? `<div class="resumen-box"><span class="resumen-label">✓ Resumen en español (no hace falta el original en inglés)</span><div class="resumen-text">${it.resumen}</div></div>`
+      : '';
+    itemsHtml += `
+      <div class="item" data-id="${itemId}" data-lang="${it.lang}">
+        <div class="check" data-id="${itemId}"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+        <div class="item-body">
+          <div class="item-top">
+            <span class="item-author">${it.a}</span>
+            <span class="item-work">— ${it.w}</span>
+            <span class="item-year">(${it.y})</span>
+            <span class="tag ${it.tag}">${tagLabel}</span>
+            <span class="tag lang-${it.lang}">${langLabel}</span>
+          </div>
+          <div class="item-note">${it.note}</div>
+          ${resumenHtml}
+          ${linkHtml}
+          <button class="note-toggle" data-noteid="${itemId}">✎ agregar/ver mis notas</button>
+          <div class="note-box" data-notebox="${itemId}">
+            <textarea data-notearea="${itemId}" placeholder="Tus conclusiones, citas para citar después, dudas..."></textarea>
+            <span class="note-saved" data-notesaved="${itemId}">guardado ✓</span>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  section.innerHTML = `
+    <div class="tab">EXPEDIENTE Nº ${mod.num}</div>
+    <div class="module-inner">
+      <div class="module-head">
+        <div style="display:flex; gap:16px; align-items:flex-start;">
+          <div class="module-number">${mod.num}</div>
+          <div>
+            <div class="module-title">${mod.title}</div>
+            <div class="module-sub">${mod.sub}</div>
+          </div>
+        </div>
+        <div class="module-progress" data-modprogress="${mod.id}">0 / ${mod.items.length}</div>
+      </div>
+      ${itemsHtml}
+    </div>`;
+  modulesEl.appendChild(section);
+});
+
+document.getElementById('total-count').textContent = allItemIds.length;
+document.getElementById('total-count-2').textContent = allItemIds.length;
+const esCount = MODULES.reduce((acc,mod)=> acc + mod.items.filter(it=>it.lang==='es').length, 0);
+document.getElementById('es-count').textContent = esCount;
+
+document.getElementById('filter-es').addEventListener('change', (e)=>{
+  const onlyEs = e.target.checked;
+  document.querySelectorAll('.item[data-lang]').forEach(item=>{
+    item.classList.toggle('hidden-by-filter', onlyEs && item.dataset.lang !== 'es');
+  });
+});
+
+// ---------- Persistence ----------
+let progress = {};
+let notes = {};
+let saveTimer = null;
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get('dossier-progreso', false);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      progress = parsed.progress || {};
+      notes = parsed.notes || {};
+    }
+  }catch(e){ progress = {}; notes = {}; }
+  applyProgress();
+  applyNotes();
+}
+async function savePersisted(){
+  try{ await window.storage.set('dossier-progreso', JSON.stringify({progress, notes}), false); }
+  catch(e){ console.error('No se pudo guardar', e); }
+}
+function applyProgress(){
+  document.querySelectorAll('.check').forEach(el=>{
+    const id = el.dataset.id;
+    el.classList.toggle('done', !!progress[id]);
+    const item = el.closest('.item');
+    if(item) item.classList.toggle('done', !!progress[id]);
+  });
+  updateCounters();
+}
+function applyNotes(){
+  document.querySelectorAll('[data-notearea]').forEach(ta=>{
+    const id = ta.dataset.notearea;
+    if(notes[id]){
+      ta.value = notes[id];
+      const btn = document.querySelector(`[data-noteid="${id}"]`);
+      if(btn) btn.textContent = '✎ mis notas (guardadas)';
+    }
+  });
+}
+function updateCounters(){
+  const total = allItemIds.length;
+  const done = allItemIds.filter(id=>progress[id]).length;
+  document.getElementById('progress-count').textContent = done+' / '+total+' leídas';
+  document.getElementById('bar-inner').style.width = (total? (done/total*100):0)+'%';
+  MODULES.forEach(mod=>{
+    const modDone = mod.items.filter((_,idx)=>progress[mod.id+'-'+idx]).length;
+    const el = document.querySelector(`[data-modprogress="${mod.id}"]`);
+    if(el) el.textContent = modDone+' / '+mod.items.length;
+  });
+}
+
+document.addEventListener('click', (e)=>{
+  const check = e.target.closest('.check');
+  if(check){
+    const id = check.dataset.id;
+    progress[id] = !progress[id];
+    applyProgress();
+    savePersisted();
+    return;
+  }
+  const toggle = e.target.closest('.note-toggle');
+  if(toggle){
+    const id = toggle.dataset.noteid;
+    const box = document.querySelector(`[data-notebox="${id}"]`);
+    box.classList.toggle('open');
+    if(box.classList.contains('open')){
+      const ta = box.querySelector('textarea');
+      ta.focus();
+    }
+  }
+});
+
+document.addEventListener('input', (e)=>{
+  const ta = e.target.closest('[data-notearea]');
+  if(!ta) return;
+  const id = ta.dataset.notearea;
+  notes[id] = ta.value;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    savePersisted();
+    const savedTag = document.querySelector(`[data-notesaved="${id}"]`);
+    if(savedTag){
+      savedTag.classList.add('show');
+      setTimeout(()=> savedTag.classList.remove('show'), 1400);
+    }
+    const btn = document.querySelector(`[data-noteid="${id}"]`);
+    if(btn) btn.textContent = ta.value.trim() ? '✎ mis notas (guardadas)' : '✎ agregar/ver mis notas';
+  }, 700);
+});
+
+loadProgress();
+</script>
+</body>
+</html>
