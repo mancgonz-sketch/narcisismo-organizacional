@@ -284,6 +284,71 @@
     display:block;
   }
   .note-saved.show{ opacity: 1; }
+  .resume-banner{
+    position: sticky;
+    top: 12px;
+    z-index: 50;
+    background: var(--ink);
+    color: #f4efe2;
+    border: 1px solid var(--gold-soft);
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    box-shadow: 0 8px 20px -8px rgba(0,0,0,0.6);
+  }
+  .resume-banner b{ color: var(--gold-soft); }
+  .resume-banner button{
+    background: var(--gold-soft);
+    color: var(--ink);
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .item.highlight-resume{
+    animation: pulseResume 1.8s ease-in-out 2;
+  }
+  @keyframes pulseResume{
+    0%, 100% { background: transparent; }
+    50% { background: rgba(169,130,47,0.18); }
+  }
+  .pdf-page-tracker{
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pdf-page-tracker input{
+    width: 52px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 4px 6px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .pdf-page-tracker button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--stamp);
+    background: none;
+    color: var(--stamp);
+    cursor: pointer;
+  }
+  .pdf-page-tracker span{ font-size: 11px; color: var(--ink-soft); }
 
   /* ---------- Footer note ---------- */
   .footnote{
@@ -330,6 +395,8 @@
       <label><input type="checkbox" id="filter-es"> Mostrar solo lecturas en español (<span id="es-count">0</span> de <span id="total-count-2">0</span>)</label>
     </div>
   </header>
+
+  <div id="resume-banner-slot"></div>
 
   <main id="modules"></main>
 
@@ -451,6 +518,7 @@ const MODULES = [
 const modulesEl = document.getElementById('modules');
 const navEl = document.getElementById('modnav');
 let allItemIds = [];
+const itemMeta = {};
 
 MODULES.forEach(mod=>{
   const a = document.createElement('a');
@@ -468,9 +536,18 @@ MODULES.forEach(mod=>{
     allItemIds.push(itemId);
     const tagLabel = it.tag === 'open' ? 'Abierto' : it.tag === 'paywall' ? 'Paywall' : 'Libro';
     const langLabel = it.lang === 'es' ? 'ES' : 'EN';
+    const isPdf = it.url && it.url.toLowerCase().includes('.pdf');
     const linkHtml = it.url
-      ? `<a class="item-link" href="${it.url}" target="_blank" rel="noopener">↗ Abrir fuente</a>`
+      ? `<a class="item-link" href="${it.url}" target="_blank" rel="noopener" data-sourcelink="${itemId}">↗ Abrir fuente</a>`
       : `<span class="item-link disabled">— espacio para sumar tu propio link —</span>`;
+    const pdfTrackerHtml = isPdf
+      ? `<div class="pdf-page-tracker">
+          <span>Página en la que quedaste:</span>
+          <input type="number" min="1" data-pdfpage="${itemId}" placeholder="—">
+          <button data-pdfsave="${itemId}">Guardar</button>
+          <a class="item-link" data-pdfresume="${itemId}" href="#" style="display:none;">↗ Retomar en esa página</a>
+        </div>`
+      : '';
     const resumenHtml = it.resumen
       ? `<div class="resumen-box"><span class="resumen-label">✓ Resumen en español (no hace falta el original en inglés)</span><div class="resumen-text">${it.resumen}</div></div>`
       : '';
@@ -488,6 +565,7 @@ MODULES.forEach(mod=>{
           <div class="item-note">${it.note}</div>
           ${resumenHtml}
           ${linkHtml}
+          ${pdfTrackerHtml}
           <button class="note-toggle" data-noteid="${itemId}">✎ agregar/ver mis notas</button>
           <div class="note-box" data-notebox="${itemId}">
             <textarea data-notearea="${itemId}" placeholder="Tus conclusiones, citas para citar después, dudas..."></textarea>
@@ -495,6 +573,7 @@ MODULES.forEach(mod=>{
           </div>
         </div>
       </div>`;
+    itemMeta[itemId] = { author: it.a, work: it.w, moduleTitle: mod.title };
   });
 
   section.innerHTML = `
@@ -530,6 +609,8 @@ document.getElementById('filter-es').addEventListener('change', (e)=>{
 // ---------- Persistence ----------
 let progress = {};
 let notes = {};
+let pdfPages = {};
+let lastPosition = null;
 let saveTimer = null;
 
 async function loadProgress(){
@@ -539,13 +620,17 @@ async function loadProgress(){
       const parsed = JSON.parse(res.value);
       progress = parsed.progress || {};
       notes = parsed.notes || {};
+      pdfPages = parsed.pdfPages || {};
+      lastPosition = parsed.lastPosition || null;
     }
-  }catch(e){ progress = {}; notes = {}; }
+  }catch(e){ progress = {}; notes = {}; pdfPages = {}; lastPosition = null; }
   applyProgress();
   applyNotes();
+  applyPdfPages();
+  showResumeBanner();
 }
 async function savePersisted(){
-  try{ await window.storage.set('dossier-progreso', JSON.stringify({progress, notes}), false); }
+  try{ await window.storage.set('dossier-progreso', JSON.stringify({progress, notes, pdfPages, lastPosition}), false); }
   catch(e){ console.error('No se pudo guardar', e); }
 }
 function applyProgress(){
@@ -566,6 +651,39 @@ function applyNotes(){
       if(btn) btn.textContent = '✎ mis notas (guardadas)';
     }
   });
+}
+function applyPdfPages(){
+  document.querySelectorAll('[data-pdfpage]').forEach(input=>{
+    const id = input.dataset.pdfpage;
+    if(pdfPages[id]){
+      input.value = pdfPages[id];
+      const resumeLink = document.querySelector(`[data-pdfresume="${id}"]`);
+      if(resumeLink){
+        const baseUrl = resumeLink.dataset.baseurl || resumeLink.getAttribute('data-baseurl');
+      }
+    }
+  });
+  document.querySelectorAll('[data-pdfresume]').forEach(a=>{
+    const id = a.dataset.pdfresume;
+    if(pdfPages[id]){
+      const srcLink = document.querySelector(`[data-sourcelink="${id}"]`);
+      if(srcLink){
+        a.href = srcLink.href + '#page=' + pdfPages[id];
+        a.style.display = 'inline-flex';
+        a.textContent = `↗ Retomar en la página ${pdfPages[id]}`;
+      }
+    }
+  });
+}
+function showResumeBanner(){
+  const slot = document.getElementById('resume-banner-slot');
+  if(!lastPosition || !itemMeta[lastPosition]){ slot.innerHTML = ''; return; }
+  const meta = itemMeta[lastPosition];
+  slot.innerHTML = `
+    <div class="resume-banner">
+      <span>📍 Seguías en <b>${meta.author}</b> — ${meta.work} <i>(${meta.moduleTitle})</i></span>
+      <button data-gotolast="1">Ir ahí</button>
+    </div>`;
 }
 function updateCounters(){
   const total = allItemIds.length;
@@ -597,6 +715,37 @@ document.addEventListener('click', (e)=>{
       const ta = box.querySelector('textarea');
       ta.focus();
     }
+    return;
+  }
+  const srcLink = e.target.closest('[data-sourcelink]');
+  if(srcLink){
+    lastPosition = srcLink.dataset.sourcelink;
+    savePersisted();
+    return;
+  }
+  const pdfSaveBtn = e.target.closest('[data-pdfsave]');
+  if(pdfSaveBtn){
+    const id = pdfSaveBtn.dataset.pdfsave;
+    const input = document.querySelector(`[data-pdfpage="${id}"]`);
+    const val = parseInt(input.value, 10);
+    if(val && val > 0){
+      pdfPages[id] = val;
+      applyPdfPages();
+      savePersisted();
+      pdfSaveBtn.textContent = '✓ Guardado';
+      setTimeout(()=>{ pdfSaveBtn.textContent = 'Guardar'; }, 1500);
+    }
+    return;
+  }
+  const gotoBtn = e.target.closest('[data-gotolast]');
+  if(gotoBtn && lastPosition){
+    const el = document.querySelector(`.item[data-id="${lastPosition}"]`);
+    if(el){
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.classList.add('highlight-resume');
+      setTimeout(()=> el.classList.remove('highlight-resume'), 3600);
+    }
+    return;
   }
 });
 
